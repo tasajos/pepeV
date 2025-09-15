@@ -7,6 +7,7 @@ import Navbar from './components/Navbar';
 import CategoryBar from './components/CategoryBar';
 import Footer from './components/Footer';
 import ShoppingCart from './components/ShoppingCart'; 
+import PaymentModal from './components/PaymentModal';
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -16,7 +17,7 @@ const toTitleCase = (str) => {
   );
 };
 
-const CategoryPage = ({ searchTerm, handleAddToCart }) => { 
+const CategoryPage = ({ searchTerm, handleAddToCart }) => {
   const { categoryName } = useParams();
   const [productos, setProductos] = useState([]);
 
@@ -68,6 +69,7 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
   const [cartItems, setCartItems] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -89,21 +91,37 @@ function App() {
     setCartItems(cartItems.filter(item => item.id !== productId));
   };
   
-  // Calcula el número total de productos en el carrito
   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+
+  const handleCheckout = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
 
   return (
     <Router>
       <div className="App">
-        {/* Pasa cartItemCount al Navbar como una prop */}
         <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />
         <CategoryBar />
         <Routes>
           <Route path="/" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
           <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
-          <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} />} />
+          {/* Add the onCheckout prop to the ShoppingCart component */}
+          <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} onCheckout={handleCheckout} />} />
         </Routes>
         <Footer />
+        {isModalOpen && (
+          <PaymentModal
+            cartItems={cartItems}
+            totalPrice={totalPrice}
+            onClose={handleCloseModal}
+          />
+        )}
       </div>
     </Router>
   );
