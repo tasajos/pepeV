@@ -21,6 +21,14 @@
   max-width: 500px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
+  max-height: 90vh; /* Limits the overall height of the modal */
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .modal-close-btn {
@@ -34,8 +42,8 @@
 }
 
 .modal-items-list {
-  max-height: 200px;
-  overflow-y: auto;
+  max-height: 200px; /* Max height for the product list section */
+  overflow-y: auto; /* Adds scrollbar only to this section */
   margin-bottom: 20px;
   border: 1px solid #eee;
   padding: 10px;
@@ -54,6 +62,32 @@
   margin-top: 10px;
 }
 
+/* New container for scrollable content below the total */
+.modal-form-scrollable {
+  flex-grow: 1; /* Allows this section to fill remaining vertical space */
+  overflow-y: auto; /* Adds scrollbar to this section */
+  padding-right: 15px; /* Adds padding for scrollbar visibility */
+}
+
+/* Updated form and map styles */
+.map-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.map-section label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.location-info {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}
+
 .form-group {
   margin-bottom: 15px;
   text-align: left;
@@ -70,6 +104,7 @@
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  box-sizing: border-box; /* Ensures padding doesn't affect total width */
 }
 
 .confirm-btn {
@@ -92,21 +127,4 @@
   .modal-content {
     padding: 20px;
   }
-}
-.map-section {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.map-section label {
-  font-weight: bold;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.location-info {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: #555;
-  text-align: center;
 }

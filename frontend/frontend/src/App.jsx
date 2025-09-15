@@ -22,11 +22,13 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    let url = 'http://localhost:5000/api/productos';
+    //let url = 'http://localhost:5000/api/productos';
+    let url = 'http://pepevende.chakuy.online/api/productos';
     
     if (categoryName) {
       const formattedCategoryName = toTitleCase(categoryName);
-      url = `http://localhost:5000/api/productos/${formattedCategoryName}`;
+      //url = `http://localhost:5000/api/productos/${formattedCategoryName}`;
+      url = `http://pepevende.chakuy.online/api/productos/${formattedCategoryName}`;
     }
     
     fetch(url)
