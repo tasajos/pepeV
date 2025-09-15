@@ -28,6 +28,22 @@ db.connect((err) => {
   console.log('Conectado a la base de datos MySQL 🚀');
 });
 
+
+// Nueva ruta para obtener productos por categoría
+app.get('/api/productos/:category', (req, res) => {
+  const category = req.params.category; // Obtiene el parámetro de la URL
+  const query = 'SELECT * FROM productos WHERE category = ?';
+  db.query(query, [category], (err, results) => {
+    if (err) {
+      console.error('Error al obtener los productos por categoría:', err);
+      res.status(500).send('Error al obtener los productos por categoría');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
 // Rutas de ejemplo (API)
 app.get('/api/productos', (req, res) => {
   const query = 'SELECT * FROM productos';
