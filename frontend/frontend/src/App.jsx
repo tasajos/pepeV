@@ -6,27 +6,23 @@ import './App.css';
 import Navbar from './components/Navbar';
 import CategoryBar from './components/CategoryBar';
 import Footer from './components/Footer';
+import ShoppingCart from './components/ShoppingCart'; 
 
-// Mueve la función toTitleCase fuera del componente
-// para que esté disponible globalmente en este archivo.
 const toTitleCase = (str) => {
-  if (!str) return ''; // Maneja el caso de que la cadena sea undefined o nula
+  if (!str) return '';
   return str.replace(
     /\w\S*/g,
     (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
   );
 };
 
-// Nuevo componente para la página de la categoría
-const CategoryPage = ({ searchTerm }) => {
+const CategoryPage = ({ searchTerm, handleAddToCart }) => { 
   const { categoryName } = useParams();
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    // Determina la URL base
     let url = 'http://localhost:5000/api/productos';
     
-    // Si hay un nombre de categoría, ajusta la URL
     if (categoryName) {
       const formattedCategoryName = toTitleCase(categoryName);
       url = `http://localhost:5000/api/productos/${formattedCategoryName}`;
@@ -56,6 +52,9 @@ const CategoryPage = ({ searchTerm }) => {
               <h2>{producto.nombre}</h2>
               <p>{producto.descripcion}</p>
               <p className="producto-precio">Precio: Bs {producto.precio}</p>
+              <button className="add-to-cart-btn" onClick={() => handleAddToCart(producto)}>
+                Agregar al Carrito
+              </button>
             </div>
           ))
         ) : (
@@ -68,19 +67,41 @@ const CategoryPage = ({ searchTerm }) => {
 
 function App() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [cartItems, setCartItems] = useState([]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+  
+  const handleAddToCart = (product) => {
+    const productExists = cartItems.find(item => item.id === product.id);
+
+    if (productExists) {
+      setCartItems(cartItems.map(item =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      ));
+    } else {
+      setCartItems([...cartItems, { ...product, quantity: 1 }]);
+    }
+  };
+
+  const handleRemoveFromCart = (productId) => {
+    setCartItems(cartItems.filter(item => item.id !== productId));
+  };
+  
+  // Calcula el número total de productos en el carrito
+  const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   return (
     <Router>
       <div className="App">
-        <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+        {/* Pasa cartItemCount al Navbar como una prop */}
+        <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />
         <CategoryBar />
         <Routes>
-          <Route path="/" element={<CategoryPage searchTerm={searchTerm} />} />
-          <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} />} />
+          <Route path="/" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
+          <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
+          <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} />} />
         </Routes>
         <Footer />
       </div>

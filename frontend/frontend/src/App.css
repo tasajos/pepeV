@@ -99,4 +99,21 @@
   margin-bottom: 10px; /* Adds space between the image and the product title */
 }
 
+
+.add-to-cart-btn {
+  background-color: var(--color-verde);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #388e3c;
+}
+
 /* El resto de estilos de Vite han sido eliminados de aquí */
