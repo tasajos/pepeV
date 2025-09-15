@@ -91,4 +91,12 @@
   box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
 }
 
+.producto-imagen {
+  width: 100%; /* Makes the image take up the full width of the product card */
+  height: 200px; /* Gives the image a fixed height */
+  object-fit: cover; /* Ensures the image fills the space without being distorted */
+  border-radius: 10px 10px 0 0; /* Rounds the top corners to match the card */
+  margin-bottom: 10px; /* Adds space between the image and the product title */
+}
+
 /* El resto de estilos de Vite han sido eliminados de aquí */
