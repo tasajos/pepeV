@@ -4,7 +4,7 @@ import './CategoryBar.css';
 
 const categories = [
   'Alimentos', 'Bebidas', 'Abarrotes', 'Cuidado del Bebé', 'Cuidado del Hogar', 'Cuidado Personal', 
-  'Ropas', 'Juguetería', 'Higiene', 'Electrodomésticos'
+  'Ropas', 'Juguetes', 'Higiene', 'Electrodomésticos'
 ];
 
 const CategoryBar = () => {
