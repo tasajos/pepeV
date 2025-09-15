@@ -71,4 +71,24 @@
   }
 }
 
+.search-container {
+  margin-top: 20px;
+}
+
+.search-input {
+  width: 80%;
+  max-width: 500px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: var(--color-verde);
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+}
+
 /* El resto de estilos de Vite han sido eliminados de aquí */
