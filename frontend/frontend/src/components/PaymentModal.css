@@ -93,3 +93,20 @@
     padding: 20px;
   }
 }
+.map-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.map-section label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.location-info {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
+  text-align: center;
+}
