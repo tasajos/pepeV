@@ -1,7 +1,9 @@
-// frontend/src/App.jsx
+/* src/App.jsx */
 
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 function App() {
   const [productos, setProductos] = useState([]);
@@ -15,8 +17,10 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
+      <Navbar />
+      <header className="main-header">
         <h1>Tienda Virtual 🛒</h1>
+        <p>Los mejores productos a tu alcance</p>
       </header>
       <div className="productos-container">
         {productos.length > 0 ? (
@@ -24,13 +28,14 @@ function App() {
             <div key={producto.id} className="producto">
               <h2>{producto.nombre}</h2>
               <p>{producto.descripcion}</p>
-              <p>Precio: ${producto.precio}</p>
+              <p className="producto-precio">Precio: ${producto.precio}</p>
             </div>
           ))
         ) : (
           <p>Cargando productos...</p>
         )}
       </div>
+      <Footer />
     </div>
   );
 }
