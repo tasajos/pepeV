@@ -1,6 +1,6 @@
+// src/context/AuthContext.jsx
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase';
 
 const AuthContext = createContext();
 
@@ -12,31 +12,30 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
-      if (firebaseUser) {
-        // Llama al backend para obtener el rol del usuario
-        try {
-          const response = await fetch('http://localhost:5000/api/user/role', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ uid: firebaseUser.uid }),
-          });
-          const data = await response.json();
-          setRole(data.role);
-        } catch (error) {
-          console.error('Error al obtener el rol del usuario:', error);
-          setRole(null);
-        }
-      } else {
-        setRole(null);
-      }
-      setLoading(false);
-    });
-    return unsubscribe;
+    const storedUser = localStorage.getItem('user');
+    const storedRole = localStorage.getItem('role');
+    if (storedUser && storedRole) {
+      setUser(JSON.parse(storedUser));
+      setRole(storedRole);
+    }
+    setLoading(false);
   }, []);
 
-  const value = { user, role, loading };
+  const login = (userData) => {
+    setUser(userData);
+    setRole(userData.role);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('role', userData.role);
+  };
+
+  const logout = () => {
+    setUser(null);
+    setRole(null);
+    localStorage.removeItem('user');
+    localStorage.removeItem('role');
+  };
+
+  const value = { user, role, loading, login, logout };
 
   return (
     <AuthContext.Provider value={value}>

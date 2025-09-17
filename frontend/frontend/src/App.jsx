@@ -1,7 +1,6 @@
-// src/App.jsx
-
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useParams, useNavigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 import Navbar from './components/Navbar';
 import CategoryBar from './components/CategoryBar';
@@ -9,8 +8,8 @@ import Footer from './components/Footer';
 import ShoppingCart from './components/ShoppingCart'; 
 import PaymentModal from './components/PaymentModal';
 import ProductModal from './components/ProductModal';
-import { AuthProvider } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
+import AdminDashboard from './pages/AdminDashboard'; 
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -23,18 +22,14 @@ const toTitleCase = (str) => {
 const CategoryPage = ({ searchTerm, handleAddToCart }) => {
   const { categoryName } = useParams();
   const [productos, setProductos] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null); // Estado para el producto seleccionado
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let url = 'http://localhost:5000/api/productos';
-      //prod
-    //  let url = 'https://pepevende.chakuy.online/api/productos';
     
     if (categoryName) {
       const formattedCategoryName = toTitleCase(categoryName);
       url = `http://localhost:5000/api/productos/${formattedCategoryName}`;
-       //prod
-     //url = `https://pepevende.chakuy.online/api/productos/${formattedCategoryName}`;
     }
     
     fetch(url)
@@ -47,12 +42,10 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
     producto.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
   
-  // Función para abrir el modal
   const handleOpenModal = (product) => {
     setSelectedProduct(product);
   };
   
-  // Función para cerrar el modal
   const handleCloseModal = () => {
     setSelectedProduct(null);
   };
@@ -67,7 +60,6 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
         {filteredProducts.length > 0 ? (
           filteredProducts.map(producto => (
             <div key={producto.id} className="producto">
-              {/* Agrega el onClick para abrir el modal */}
               <img
                 src={producto.imagen}
                 alt={producto.nombre}
@@ -77,7 +69,7 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
               <h2>{producto.nombre}</h2>
               <p>{producto.descripcion}</p>
               <p className="producto-precio">Precio: Bs {producto.precio}</p>
-              <button className="add-to-cart-btn" onClick={() => handleAddToCart(producto)}>
+              <button className="add-to-cart-btn" onClick={() => handleAddToCart(producto, 1)}>
                 Agregar al Carrito
               </button>
             </div>
@@ -87,7 +79,6 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
         )}
       </div>
       
-      {/* Renderiza el modal si hay un producto seleccionado */}
       {selectedProduct && (
         <ProductModal 
           product={selectedProduct} 
@@ -99,27 +90,24 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
   );
 };
 
-function App() {
+function MainApp() {
   const [searchTerm, setSearchTerm] = useState('');
   const [cartItems, setCartItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  
+  const { user, role, loading } = useAuth();
+  
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
   
-  // Modifica la función para que reciba el producto y la cantidad
   const handleAddToCart = (product, quantity = 1) => {
-    // Busca si el producto ya está en el carrito
     const productExists = cartItems.find(item => item.id === product.id);
-
     if (productExists) {
-      // Si existe, actualiza la cantidad
       setCartItems(cartItems.map(item =>
         item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
       ));
     } else {
-      // Si no existe, lo agrega con la cantidad proporcionada
       setCartItems([...cartItems, { ...product, quantity: quantity }]);
     }
   };
@@ -139,31 +127,49 @@ function App() {
   };
 
   const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
+  
+  if (loading) {
+    return <div>Cargando...</div>;
+  }
+  
+  if (user && role === 'Administrador') {
+    return (
+      <div className="App">
+        <Routes>
+          <Route path="/*" element={<AdminDashboard />} />
+        </Routes>
+      </div>
+    );
+  }
 
-   return (
-    <Router>
-      <AuthProvider> {/* Envuelve las rutas con el AuthProvider */}
-        <div className="App">
-          <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />
-          <CategoryBar />
-          <Routes>
-            <Route path="/" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
-            <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
-            <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} onCheckout={handleCheckout} />} />
-            <Route path="/login" element={<LoginPage />} />
-          </Routes>
-          <Footer />
-          {isModalOpen && (
-            <PaymentModal
-              cartItems={cartItems}
-              totalPrice={totalPrice}
-              onClose={handleCloseModal}
-            />
-          )}
-        </div>
-      </AuthProvider>
-    </Router>
+  return (
+    <div className="App">
+      <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />
+      <CategoryBar />
+      <Routes>
+        <Route path="/" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
+        <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
+        <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} onCheckout={handleCheckout} />} />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
+      <Footer />
+      {isModalOpen && (
+        <PaymentModal
+          cartItems={cartItems}
+          totalPrice={totalPrice}
+          onClose={handleCloseModal}
+        />
+      )}
+    </div>
   );
 }
 
-export default App;
+const AppWrapper = () => (
+  <Router>
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
+  </Router>
+);
+
+export default AppWrapper;

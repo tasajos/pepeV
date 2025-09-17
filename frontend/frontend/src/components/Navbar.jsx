@@ -1,24 +1,18 @@
-// src/components/Navbar.jsx
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { auth } from '../firebase';
-import { signOut } from 'firebase/auth';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-// Recibe la nueva prop cartItemCount
 const Navbar = ({ searchTerm, handleSearchChange, cartItemCount }) => {
-  const { user, role, loading } = useAuth();
+  const { user, role, loading, logout } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
   };
-
+  
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -51,9 +45,7 @@ const Navbar = ({ searchTerm, handleSearchChange, cartItemCount }) => {
           </li>
         </ul>
         <div className="navbar-auth">
-          {loading ? (
-            <p>Cargando...</p>
-          ) : user ? (
+          {user ? (
             <>
               <p className="user-info">Hola, {user.email}!</p>
               <button className="btn-logout" onClick={handleLogout}>Cerrar Sesión</button>

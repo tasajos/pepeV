@@ -1,9 +1,8 @@
 // src/pages/LoginPage.jsx
 
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -12,6 +11,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,16 +19,31 @@ const LoginPage = () => {
     setIsLoading(true);
     
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error de autenticación.');
+      }
+
+      const userData = await response.json();
+      login(userData); // Guarda los datos del usuario en el contexto
       
-      // Elimina el setTimeout para una redirección inmediata
-      navigate('/');
+      if (userData.role === 'Administrador') {
+        navigate('/admin-dashboard', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
       
     } catch (err) {
-      setError('Credenciales incorrectas o usuario no válido.');
+      setError(err.message);
       console.error(err);
     } finally {
-      setIsLoading(false); // Detiene el loading en cualquier caso
+      setIsLoading(false);
     }
   };
 
@@ -36,7 +51,7 @@ const LoginPage = () => {
     <div className="login-container">
     
       <div className="login-card">
-          <h1>Iniciar Sesión</h1>
+        <h1>Iniciar Sesión</h1>
         <img src="/pepe_vende-remove.png" alt="Pepe Vende Logo" className="login-logo" />
         
         <form onSubmit={handleSubmit}>

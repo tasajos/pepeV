@@ -28,23 +28,30 @@ db.connect((err) => {
   console.log('Conectado a la base de datos MySQL 🚀');
 });
 
-
-// Nueva ruta para obtener productos por categoría
-app.get('/api/productos/:category', (req, res) => {
-  const category = req.params.category; // Obtiene el parámetro de la URL
-  const query = 'SELECT * FROM productos WHERE category = ?';
-  db.query(query, [category], (err, results) => {
+// Ruta para verificar email y password y devolver el rol
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body;
+  
+  const query = 'SELECT id, email, role, status FROM users WHERE email = ? AND password = ?';
+  db.query(query, [email, password], (err, results) => {
     if (err) {
-      console.error('Error al obtener los productos por categoría:', err);
-      res.status(500).send('Error al obtener los productos por categoría');
-      return;
+      console.error('Error en la base de datos:', err);
+      return res.status(500).json({ error: 'Error interno del servidor' });
     }
-    res.json(results);
+    
+    if (results.length > 0) {
+      const user = results[0];
+      if (user.status === 0) {
+        return res.status(401).json({ error: 'Usuario deshabilitado' });
+      }
+      return res.status(200).json({ id: user.id, email: user.email, role: user.role, status: user.status });
+    } else {
+      return res.status(401).json({ error: 'Credenciales incorrectas' });
+    }
   });
 });
 
-
-// Rutas de ejemplo (API)
+// Ruta para obtener todos los productos
 app.get('/api/productos', (req, res) => {
   const query = 'SELECT * FROM productos';
   db.query(query, (err, results) => {
@@ -56,32 +63,17 @@ app.get('/api/productos', (req, res) => {
   });
 });
 
-app.post('/api/user/role', (req, res) => {
-  const { uid } = req.body;
-  if (!uid) {
-    return res.status(400).json({ error: 'UID is required' });
-  }
-
-  const query = 'SELECT role, status FROM users WHERE id = ?';
-  db.query(query, [uid], (err, results) => {
+// Ruta para obtener productos por categoría
+app.get('/api/productos/:category', (req, res) => {
+  const category = req.params.category;
+  const query = 'SELECT * FROM productos WHERE category = ?';
+  db.query(query, [category], (err, results) => {
     if (err) {
-      console.error('Error al buscar el usuario:', err);
-      return res.status(500).send('Error en la base de datos');
+      console.error('Error al obtener los productos por categoría:', err);
+      res.status(500).send('Error al obtener los productos por categoría');
+      return;
     }
-    
-    if (results.length === 0) {
-      // Si el usuario no existe en la base de datos, lo tratamos como un nuevo cliente
-      const insertQuery = 'INSERT INTO users (id, email, role, status) VALUES (?, ?, ?, ?)';
-      db.query(insertQuery, [uid, 'newuser@example.com', 'Cliente', 1], (insertErr) => {
-        if (insertErr) {
-          console.error('Error al insertar nuevo usuario:', insertErr);
-          return res.status(500).send('Error al registrar nuevo usuario');
-        }
-        res.json({ role: 'Cliente', status: 1 });
-      });
-    } else {
-      res.json(results[0]);
-    }
+    res.json(results);
   });
 });
 
