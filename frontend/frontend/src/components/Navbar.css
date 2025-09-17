@@ -61,6 +61,28 @@
   font-weight: bold;
 }
 
+.btn-logout {
+  background-color: var(--color-guindo); /* Color para que se distinga */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: #a00000; /* Un tono más oscuro para el efecto hover */
+}
+
+/* Estilo para el nombre del usuario */
+.user-info {
+  margin: 0 1rem;
+  font-weight: bold;
+  color: var(--color-texto-oscuro);
+}
+
 @media (max-width: 768px) {
   .navbar {
     flex-direction: column;

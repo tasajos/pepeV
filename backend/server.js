@@ -56,6 +56,35 @@ app.get('/api/productos', (req, res) => {
   });
 });
 
+app.post('/api/user/role', (req, res) => {
+  const { uid } = req.body;
+  if (!uid) {
+    return res.status(400).json({ error: 'UID is required' });
+  }
+
+  const query = 'SELECT role, status FROM users WHERE id = ?';
+  db.query(query, [uid], (err, results) => {
+    if (err) {
+      console.error('Error al buscar el usuario:', err);
+      return res.status(500).send('Error en la base de datos');
+    }
+    
+    if (results.length === 0) {
+      // Si el usuario no existe en la base de datos, lo tratamos como un nuevo cliente
+      const insertQuery = 'INSERT INTO users (id, email, role, status) VALUES (?, ?, ?, ?)';
+      db.query(insertQuery, [uid, 'newuser@example.com', 'Cliente', 1], (insertErr) => {
+        if (insertErr) {
+          console.error('Error al insertar nuevo usuario:', insertErr);
+          return res.status(500).send('Error al registrar nuevo usuario');
+        }
+        res.json({ role: 'Cliente', status: 1 });
+      });
+    } else {
+      res.json(results[0]);
+    }
+  });
+});
+
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });

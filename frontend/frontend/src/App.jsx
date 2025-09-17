@@ -9,6 +9,8 @@ import Footer from './components/Footer';
 import ShoppingCart from './components/ShoppingCart'; 
 import PaymentModal from './components/PaymentModal';
 import ProductModal from './components/ProductModal';
+import { AuthProvider } from './context/AuthContext';
+import LoginPage from './pages/LoginPage';
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -138,26 +140,28 @@ function App() {
 
   const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
 
-  return (
+   return (
     <Router>
-      <div className="App">
-        <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />
-        <CategoryBar />
-        <Routes>
-          {/* Pasa la función handleAddToCart modificada */}
-          <Route path="/" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
-          <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
-          <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} onCheckout={handleCheckout} />} />
-        </Routes>
-        <Footer />
-        {isModalOpen && (
-          <PaymentModal
-            cartItems={cartItems}
-            totalPrice={totalPrice}
-            onClose={handleCloseModal}
-          />
-        )}
-      </div>
+      <AuthProvider> {/* Envuelve las rutas con el AuthProvider */}
+        <div className="App">
+          <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />
+          <CategoryBar />
+          <Routes>
+            <Route path="/" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
+            <Route path="/categoria/:categoryName" element={<CategoryPage searchTerm={searchTerm} handleAddToCart={handleAddToCart} />} />
+            <Route path="/cart" element={<ShoppingCart cartItems={cartItems} onRemoveItem={handleRemoveFromCart} onCheckout={handleCheckout} />} />
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+          <Footer />
+          {isModalOpen && (
+            <PaymentModal
+              cartItems={cartItems}
+              totalPrice={totalPrice}
+              onClose={handleCloseModal}
+            />
+          )}
+        </div>
+      </AuthProvider>
     </Router>
   );
 }
