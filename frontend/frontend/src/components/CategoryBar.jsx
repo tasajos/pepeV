@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './CategoryBar.css';
 
 const categories = [
-  'Alimentos', 'Bebidas', 'Abarrotes', 'Cuidado del Bebé', 'Cuidado del Hogar', 'Cuidado Personal', 
+  'Alimentos', 'Bebidas', 'Hogar', 'Cuidado del Bebé', 'Cuidado del Hogar', 'Cuidado Personal', 
   'Ropas', 'Juguetes', 'Higiene', 'Electrodomésticos'
 ];
 

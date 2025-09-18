@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// src/App.jsx
+
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
@@ -10,6 +12,10 @@ import PaymentModal from './components/PaymentModal';
 import ProductModal from './components/ProductModal';
 import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard'; 
+import ProtectedRoute from './components/ProtectedRoute'; // <-- Importación correcta
+import AddProductPage from './pages/AddProductPage'; // <-- Importación correcta
+import AdminLayout from './components/AdminLayout';
+
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -19,12 +25,13 @@ const toTitleCase = (str) => {
   );
 };
 
+// Componente para la página principal de productos
 const CategoryPage = ({ searchTerm, handleAddToCart }) => {
   const { categoryName } = useParams();
   const [productos, setProductos] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let url = 'http://localhost:5000/api/productos';
     
     if (categoryName) {
@@ -49,6 +56,9 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
   const handleCloseModal = () => {
     setSelectedProduct(null);
   };
+
+
+
 
   return (
     <>
@@ -132,16 +142,20 @@ function MainApp() {
     return <div>Cargando...</div>;
   }
   
+  // Si el usuario es administrador, usa el AdminLayout para todas las rutas del panel
   if (user && role === 'Administrador') {
     return (
-      <div className="App">
+      <AdminLayout>
         <Routes>
-          <Route path="/*" element={<AdminDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-dashboard/add-product" element={<AddProductPage />} />
+          {/* Añade aquí más rutas del panel de administrador */}
         </Routes>
-      </div>
+      </AdminLayout>
     );
   }
 
+  // Layout para clientes y usuarios no autenticados
   return (
     <div className="App">
       <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} cartItemCount={cartItemCount} />

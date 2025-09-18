@@ -1,4 +1,4 @@
-/* src/pages/AdminDashboard.css */
+/* src/components/AdminLayout.css */
 
 .admin-container {
   min-height: 100vh;
@@ -16,12 +16,36 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.admin-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
 .admin-logo {
   font-size: 1.8rem;
   font-weight: bold;
+  color: white;
+  text-decoration: none;
 }
 
-.admin-auth {
+.admin-nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.admin-nav-link {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.admin-nav-link:hover {
+  color: var(--color-amarillo);
+}
+
+.admin-right {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -29,17 +53,22 @@
 
 .user-info {
   font-weight: 500;
-  color: rgb(255, 253, 253);
+  color: white;
 }
 
 .btn-logout {
-  background-color: #a00000;
+  background-color: var(--color-azul);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+}
+
+.admin-content {
+  padding: 20px;
+  flex-grow: 1;
 }
 
 .admin-cards-container {

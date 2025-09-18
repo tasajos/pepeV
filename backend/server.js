@@ -63,6 +63,26 @@ app.get('/api/productos', (req, res) => {
   });
 });
 
+// Ruta para añadir productos
+app.post('/api/productos/add', (req, res) => {
+  const { nombre, descripcion, precio, imagen, category } = req.body;
+  
+  if (!nombre || !descripcion || !precio || !imagen || !category) {
+    return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+  }
+
+  const query = 'INSERT INTO productos (nombre, descripcion, precio, imagen, category) VALUES (?, ?, ?, ?, ?)';
+  const values = [nombre, descripcion, precio, imagen, category];
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error('Error al insertar el producto:', err);
+      return res.status(500).json({ error: 'Error al guardar el producto en la base de datos.' });
+    }
+    res.status(201).json({ message: 'Producto añadido con éxito.', id: result.insertId });
+  });
+});
+
 // Ruta para obtener productos por categoría
 app.get('/api/productos/:category', (req, res) => {
   const category = req.params.category;
