@@ -4,7 +4,7 @@ import { storage } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import './AddProductPage.css';
 
-const categories = ['Tecnologia', 'Alimentos', 'Bebidas', 'Congelados', 'Cuidado Personal', 'Ropa', 'Juguetes','Hogar'];
+const categories = ['Tecnologia','Animales', 'Alimentos', 'Bebidas', 'Congelados', 'Cuidado Personal', 'Ropas', 'Juguetes','Hogar'];
 
 const AddProductPage = () => {
   const [nombre, setNombre] = useState('');
