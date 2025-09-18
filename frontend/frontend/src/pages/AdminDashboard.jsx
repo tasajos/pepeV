@@ -36,6 +36,10 @@ const AdminDashboard = () => {
           <div className="card-icon">➕</div>
           <div className="card-title">Añadir Productos</div>
         </Link>
+        <Link to="/admin-dashboard/view-products" className="admin-card"> {/* Enlace actualizado */}
+          <div className="card-icon">👁️</div>
+          <div className="card-title">Ver Productos</div>
+        </Link>
         <Link to="/admin-dashboard/view-users" className="admin-card">
           <div className="card-icon">👥</div>
           <div className="card-title">Ver Usuarios</div>

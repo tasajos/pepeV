@@ -1,0 +1,62 @@
+.admin-products-container {
+  padding: 20px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.admin-product-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+}
+
+.admin-product-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.admin-product-details {
+  padding: 15px;
+}
+
+.status-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.status-badge {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.status-badge.active {
+  background-color: var(--color-verde);
+}
+
+.status-badge.inactive {
+  background-color: #f44336;
+}
+
+.status-btn {
+  background-color: var(--color-azul);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.status-btn:hover {
+  background-color: #1976d2;
+}
