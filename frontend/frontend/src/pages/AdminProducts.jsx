@@ -15,7 +15,8 @@ const AdminProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/productos');
+        // La URL ahora es para obtener TODOS los productos
+        const response = await fetch('http://localhost:5000/api/productos/all'); 
         if (!response.ok) {
           throw new Error('No se pudieron cargar los productos');
         }
@@ -46,7 +47,6 @@ const AdminProducts = () => {
         throw new Error('Error al actualizar el estado en el servidor.');
       }
       
-      // Actualiza el estado local para reflejar el cambio en la UI
       setProductos(prevProducts => prevProducts.map(p =>
         p.id === productId ? { ...p, status: newStatus } : p
       ));

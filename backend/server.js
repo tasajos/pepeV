@@ -51,9 +51,9 @@ app.post('/api/login', (req, res) => {
   });
 });
 
-// Ruta para obtener todos los productos
+// Ruta para obtener todos los productos (solo los habilitados)
 app.get('/api/productos', (req, res) => {
-  const query = 'SELECT * FROM productos';
+  const query = 'SELECT * FROM productos WHERE status = 1';
   db.query(query, (err, results) => {
     if (err) {
       res.status(500).send('Error al obtener los productos');
@@ -62,6 +62,22 @@ app.get('/api/productos', (req, res) => {
     res.json(results);
   });
 });
+
+
+// Ruta para obtener TODOS los productos (habilitados e inhabilitados, para el administrador)
+app.get('/api/productos/all', (req, res) => {
+  const query = 'SELECT * FROM productos';
+  db.query(query, (err, results) => {
+    if (err) {
+      res.status(500).send('Error al obtener todos los productos');
+      return;
+    }
+    res.json(results);
+  });
+});
+
+
+
 
 // Ruta para añadir productos
 app.post('/api/productos/add', (req, res) => {
@@ -83,10 +99,10 @@ app.post('/api/productos/add', (req, res) => {
   });
 });
 
-// Ruta para obtener productos por categoría
+// Ruta para obtener productos por categoría (solo los habilitados)
 app.get('/api/productos/:category', (req, res) => {
   const category = req.params.category;
-  const query = 'SELECT * FROM productos WHERE category = ?';
+  const query = 'SELECT * FROM productos WHERE category = ? AND status = 1';
   db.query(query, [category], (err, results) => {
     if (err) {
       console.error('Error al obtener los productos por categoría:', err);
