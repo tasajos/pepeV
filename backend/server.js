@@ -97,6 +97,29 @@ app.get('/api/productos/:category', (req, res) => {
   });
 });
 
+app.put('/api/productos/:id/status', (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (status === undefined) {
+    return res.status(400).json({ error: 'El estado es obligatorio.' });
+  }
+
+  const query = 'UPDATE productos SET status = ? WHERE id = ?';
+  db.query(query, [status, id], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar el estado del producto:', err);
+      return res.status(500).json({ error: 'Error al actualizar el estado en la base de datos.' });
+    }
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Producto no encontrado.' });
+    }
+    res.status(200).json({ message: 'Estado del producto actualizado con éxito.' });
+  });
+});
+
+
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });

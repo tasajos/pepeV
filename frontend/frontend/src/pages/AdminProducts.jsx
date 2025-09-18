@@ -32,13 +32,29 @@ const AdminProducts = () => {
 
   const handleStatusChange = async (productId, currentStatus) => {
     const newStatus = currentStatus === 1 ? 0 : 1;
-    // Lógica para actualizar el estado del producto en el backend
-    // Esto requiere un nuevo endpoint en el backend que debes crear
-    console.log(`Cambiando estado del producto ${productId} a ${newStatus}`);
-    // Una vez que el backend responda, actualiza el estado local
-    setProductos(prevProducts => prevProducts.map(p =>
-      p.id === productId ? { ...p, status: newStatus } : p
-    ));
+    
+    try {
+      const response = await fetch(`http://localhost:5000/api/productos/${productId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al actualizar el estado en el servidor.');
+      }
+      
+      // Actualiza el estado local para reflejar el cambio en la UI
+      setProductos(prevProducts => prevProducts.map(p =>
+        p.id === productId ? { ...p, status: newStatus } : p
+      ));
+      
+    } catch (err) {
+      console.error('Error:', err);
+      setError('Error al conectar con el servidor.');
+    }
   };
 
   if (loading) return <div>Cargando productos...</div>;
