@@ -1,9 +1,8 @@
-/* src/pages/ConfigurationPage.css */
-
 .config-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-start; /* Alinea las tarjetas en la parte superior */
+  gap: 30px; /* Agrega espacio entre las tarjetas */
   padding: 40px 20px;
 }
 
@@ -63,4 +62,54 @@
   text-align: center;
   margin-top: 20px;
   font-weight: bold;
+}
+
+.update-prices-section {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.update-prices-section h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.update-prices-section p {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.update-prices-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-verde);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.update-prices-btn:hover:not(:disabled) {
+  background-color: #388e3c;
+}
+
+.update-prices-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .config-container {
+    flex-direction: column;
+    align-items: center;
+  }
 }

@@ -11,6 +11,7 @@ const ConfigurationPage = () => {
   });
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
+  const [isUpdatingAllPrices, setIsUpdatingAllPrices] = useState(false);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -58,6 +59,24 @@ const ConfigurationPage = () => {
     }
   };
 
+  const handleUpdateAllPrices = async () => {
+    setIsUpdatingAllPrices(true);
+    setMessage('Actualizando todos los precios...');
+    try {
+      const response = await fetch('http://localhost:5000/api/productos/update-prices', {
+        method: 'POST',
+      });
+      if (!response.ok) {
+        throw new Error('Error al actualizar los precios en el servidor.');
+      }
+      setMessage('Todos los precios han sido actualizados con éxito.');
+    } catch (err) {
+      setMessage(`Error: ${err.message}`);
+    } finally {
+      setIsUpdatingAllPrices(false);
+    }
+  };
+
   if (loading) return <div>Cargando configuración...</div>;
 
   return (
@@ -80,6 +99,17 @@ const ConfigurationPage = () => {
           <button type="submit" className="save-btn">Guardar Cambios</button>
         </form>
         {message && <p className="status-message">{message}</p>}
+      </div>
+      <div className="update-prices-section">
+        <h3>Actualización de Precios</h3>
+        <p>Utilice este botón para recalcular todos los precios de venta en base al porcentaje de venta actual.</p>
+        <button 
+          onClick={handleUpdateAllPrices} 
+          className="update-prices-btn" 
+          disabled={isUpdatingAllPrices}
+        >
+          {isUpdatingAllPrices ? 'Actualizando...' : 'Actualizar Todos los Precios'}
+        </button>
       </div>
     </div>
   );

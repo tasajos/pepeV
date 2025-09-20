@@ -63,6 +63,33 @@ app.put('/api/config', (req, res) => {
 });
 
 
+// Nuevo endpoint para actualizar todos los precios de los productos
+app.post('/api/productos/update-prices', (req, res) => {
+  const configQuery = 'SELECT setting_value FROM configuracion WHERE setting_name = "porcentaje_venta"';
+  db.query(configQuery, (err, configResult) => {
+    if (err || configResult.length === 0) {
+      console.error('Error al obtener el porcentaje de venta:', err);
+      return res.status(500).json({ error: 'Error al obtener la configuración de la tienda.' });
+    }
+    
+    const porcentaje_venta = parseFloat(configResult[0].setting_value);
+    
+    const updateQuery = `
+      UPDATE productos
+      SET precio_venta = precio + (precio * ? / 100)
+    `;
+    
+    db.query(updateQuery, [porcentaje_venta], (err, result) => {
+      if (err) {
+        console.error('Error al actualizar los precios:', err);
+        return res.status(500).json({ error: 'Error al actualizar todos los precios.' });
+      }
+      res.status(200).json({ message: 'Todos los precios han sido actualizados con éxito.', affectedRows: result.affectedRows });
+    });
+  });
+});
+
+
 
 // Ruta para verificar email y password y devolver el rol
 app.post('/api/login', (req, res) => {
