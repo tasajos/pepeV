@@ -28,6 +28,42 @@ db.connect((err) => {
   console.log('Conectado a la base de datos MySQL 🚀');
 });
 
+// Ruta para obtener todos los valores de configuración
+app.get('/api/config', (req, res) => {
+  const query = 'SELECT * FROM configuracion';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al obtener la configuración:', err);
+      return res.status(500).json({ error: 'Error al obtener la configuración de la base de datos.' });
+    }
+    const config = results.reduce((obj, item) => {
+      obj[item.setting_name] = item.setting_value;
+      return obj;
+    }, {});
+    res.json(config);
+  });
+});
+
+// Ruta para actualizar un valor de configuración
+app.put('/api/config', (req, res) => {
+  const { setting_name, setting_value } = req.body;
+
+  if (!setting_name || setting_value === undefined) {
+    return res.status(400).json({ error: 'Faltan parámetros: setting_name y setting_value son obligatorios.' });
+  }
+
+  const query = 'INSERT INTO configuracion (setting_name, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = ?';
+  db.query(query, [setting_name, setting_value, setting_value], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar la configuración:', err);
+      return res.status(500).json({ error: 'Error al guardar la configuración en la base de datos.' });
+    }
+    res.status(200).json({ message: 'Configuración actualizada con éxito.' });
+  });
+});
+
+
+
 // Ruta para verificar email y password y devolver el rol
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;

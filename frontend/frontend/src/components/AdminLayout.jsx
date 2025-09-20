@@ -31,6 +31,7 @@ const AdminLayout = ({ children }) => {
           <div className="admin-nav-links">
             <Link to="/admin-dashboard/add-product" className="admin-nav-link">Añadir Producto</Link>
            <Link to="/admin-dashboard/view-products" className="admin-nav-link">Ver Productos</Link> {/* Enlace actualizado */}
+           <Link to="/admin-dashboard/config" className="admin-nav-link">Configuración</Link> {/* Nuevo enlace */}
             <Link to="/admin-dashboard/view-users" className="admin-nav-link">Ver Usuarios</Link>
           </div>
         </div>

@@ -12,10 +12,11 @@ import PaymentModal from './components/PaymentModal';
 import ProductModal from './components/ProductModal';
 import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard'; 
-import ProtectedRoute from './components/ProtectedRoute'; // <-- Importación correcta
-import AddProductPage from './pages/AddProductPage'; // <-- Importación correcta
+import ProtectedRoute from './components/ProtectedRoute'; 
+import AddProductPage from './pages/AddProductPage'; 
 import AdminLayout from './components/AdminLayout';
 import AdminProducts from './pages/AdminProducts';
+import ConfigurationPage from './pages/ConfigurationPage'; // Nuevo import
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -150,6 +151,7 @@ function MainApp() {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-dashboard/add-product" element={<AddProductPage />} />
            <Route path="/admin-dashboard/view-products" element={<AdminProducts />} /> {/* Nueva ruta */}
+           <Route path="/admin-dashboard/config" element={<ConfigurationPage />} /> {/* Nueva ruta */}
           {/* Añade aquí más rutas del panel de administrador */}
         </Routes>
       </AdminLayout>

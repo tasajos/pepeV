@@ -44,6 +44,10 @@ const AdminDashboard = () => {
           <div className="card-icon">👥</div>
           <div className="card-title">Ver Usuarios</div>
         </Link>
+           <Link to="/admin-dashboard/config" className="admin-card">
+            <div className="card-icon">⚙️</div>
+            <div className="card-title">Configuración</div>
+          </Link>
       </div>
     </div>
   );
