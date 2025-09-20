@@ -60,3 +60,16 @@
 .status-btn:hover {
   background-color: #1976d2;
 }
+
+.admin-price {
+  font-weight: normal;
+  color: #555;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.admin-price-sale {
+  font-weight: bold;
+  color: var(--color-verde);
+  margin-top: 5px;
+}

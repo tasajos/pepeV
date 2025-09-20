@@ -6,7 +6,7 @@ import './ShoppingCart.css';
 const ShoppingCart = ({ cartItems, onRemoveItem, onCheckout }) => {
   const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
 
-  return (
+ return (
     <div className="cart-container">
       <h2>Carrito de Compras</h2>
       {cartItems.length === 0 ? (
@@ -19,7 +19,8 @@ const ShoppingCart = ({ cartItems, onRemoveItem, onCheckout }) => {
                 <img src={item.imagen} alt={item.nombre} className="cart-item-image" />
                 <div className="item-details">
                   <h3>{item.nombre}</h3>
-                  <p>Precio: Bs {Number(item.precio).toFixed(2)}</p>
+                  {/* Muestra el nuevo precio de venta */}
+                  <p>Precio: Bs {Number(item.precio_venta).toFixed(2)}</p>
                   <p>Cantidad: {item.quantity}</p>
                 </div>
                 <button className="remove-item-btn" onClick={() => onRemoveItem(item.id)}>

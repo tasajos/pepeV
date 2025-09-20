@@ -29,7 +29,8 @@ const ProductModal = ({ product, onClose, onAddToCart }) => {
           <div className="modal-product-details">
             <h2>{product.nombre}</h2>
             <p className="modal-description">{product.descripcion}</p>
-            <p className="modal-price">Precio: Bs {Number(product.precio).toFixed(2)}</p>
+            {/* Muestra el nuevo precio de venta */}
+            <p className="modal-price">Precio: Bs {Number(product.precio_venta).toFixed(2)}</p>
             <div className="modal-quantity-selector">
               <label>Cantidad:</label>
               <input 

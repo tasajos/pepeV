@@ -79,7 +79,8 @@ const CategoryPage = ({ searchTerm, handleAddToCart }) => {
               />
               <h2>{producto.nombre}</h2>
               <p>{producto.descripcion}</p>
-              <p className="producto-precio">Precio: Bs {producto.precio}</p>
+              {/* Muestra el nuevo precio de venta */}
+              <p className="producto-precio">Precio: Bs {Number(producto.precio_venta).toFixed(2)}</p>
               <button className="add-to-cart-btn" onClick={() => handleAddToCart(producto, 1)}>
                 Agregar al Carrito
               </button>

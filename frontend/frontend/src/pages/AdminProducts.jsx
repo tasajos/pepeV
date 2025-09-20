@@ -60,8 +60,9 @@ const AdminProducts = () => {
   if (loading) return <div>Cargando productos...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  return (
+ return (
     <div className="admin-products-container">
+      <h2>Gestión de Productos</h2>
       <div className="products-grid">
         {productos.map(producto => (
           <div key={producto.id} className="admin-product-card">
@@ -69,7 +70,9 @@ const AdminProducts = () => {
             <div className="admin-product-details">
               <h3>{producto.nombre}</h3>
               <p>{producto.descripcion}</p>
-              <p>Precio: Bs {producto.precio}</p>
+              {/* Muestra ambos precios para el administrador */}
+              <p className="admin-price">Precio de Costo: Bs {Number(producto.precio).toFixed(2)}</p>
+              <p className="admin-price-sale">Precio de Venta: Bs {Number(producto.precio_venta).toFixed(2)}</p>
               <div className="status-toggle">
                 <span className={`status-badge ${producto.status === 1 ? 'active' : 'inactive'}`}>
                   {producto.status === 1 ? 'Habilitado' : 'Deshabilitado'}
