@@ -19,7 +19,7 @@ const PaymentModal = ({ cartItems, totalPrice, onClose }) => {
     message += `*Productos:*\n`;
 
     cartItems.forEach(item => {
-      message += `- ${item.nombre} (x${item.quantity}) - Bs ${Number(item.precio).toFixed(2)}\n`;
+      message += `- ${item.nombre} (x${item.quantity}) - Bs ${Number(item.precio_venta).toFixed(2)}\n`;
     });
 
     message += `\n*Total a pagar: Bs ${Number(totalPrice).toFixed(2)}*\n\n`;
@@ -54,7 +54,7 @@ const PaymentModal = ({ cartItems, totalPrice, onClose }) => {
           {cartItems.map(item => (
             <div key={item.id} className="modal-item">
               <span>{item.nombre} (x{item.quantity})</span>
-              <span>Bs {Number(item.precio).toFixed(2)}</span>
+              <span>Bs {Number(item.precio_venta).toFixed(2)}</span>
             </div>
           ))}
         </div>

@@ -4,8 +4,8 @@ import React from 'react';
 import './ShoppingCart.css';
 
 const ShoppingCart = ({ cartItems, onRemoveItem, onCheckout }) => {
-  const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
-
+  //const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
+  const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio_venta) * item.quantity, 0);
  return (
     <div className="cart-container">
       <h2>Carrito de Compras</h2>

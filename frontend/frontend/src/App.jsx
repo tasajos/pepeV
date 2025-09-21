@@ -138,7 +138,7 @@ function MainApp() {
     setIsModalOpen(false);
   };
 
-  const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio) * item.quantity, 0);
+  const totalPrice = cartItems.reduce((total, item) => total + Number(item.precio_venta) * item.quantity, 0);
   
   if (loading) {
     return <div>Cargando...</div>;
