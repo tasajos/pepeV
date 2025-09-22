@@ -45,6 +45,40 @@ app.get('/api/config', (req, res) => {
 });
 
 
+// Ruta para obtener todos los pedidos
+app.get('/api/pedidos/all', (req, res) => {
+  const query = 'SELECT * FROM pedidos_ventas ORDER BY fecha_pedido DESC';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error('Error al obtener los pedidos:', err);
+      return res.status(500).json({ error: 'Error al obtener los pedidos.' });
+    }
+    res.json(results);
+  });
+});
+
+// Ruta para actualizar el estado de un pedido
+app.put('/api/pedidos/:id/status', (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body;
+
+  if (!estado) {
+    return res.status(400).json({ error: 'El estado es obligatorio.' });
+  }
+
+  const query = 'UPDATE pedidos_ventas SET estado = ? WHERE id = ?';
+  db.query(query, [estado, id], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar el estado del pedido:', err);
+      return res.status(500).json({ error: 'Error al actualizar el estado del pedido.' });
+    }
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Pedido no encontrado.' });
+    }
+    res.status(200).json({ message: 'Estado del pedido actualizado con éxito.' });
+  });
+});
 
 
 

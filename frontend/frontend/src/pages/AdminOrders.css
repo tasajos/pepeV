@@ -1,0 +1,56 @@
+.admin-orders-container {
+  padding: 20px;
+}
+
+.pedidos-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.pedidos-table th, .pedidos-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.pedidos-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+.pedidos-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+.status-select {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  background-color: #f2f2f2;
+}
+
+.status-select.pendiente {
+  background-color: #ffc107;
+}
+
+.status-select.completado {
+  background-color: var(--color-verde);
+  color: white;
+}
+
+.status-select.en-progreso {
+  background-color: var(--color-azul);
+  color: white;
+}
+
+.status-select.incompleto {
+  background-color: #f44336;
+  color: white;
+}

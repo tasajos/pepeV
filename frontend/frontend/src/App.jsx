@@ -17,6 +17,7 @@ import AddProductPage from './pages/AddProductPage';
 import AdminLayout from './components/AdminLayout';
 import AdminProducts from './pages/AdminProducts';
 import ConfigurationPage from './pages/ConfigurationPage'; // Nuevo import
+import AdminOrders from './pages/AdminOrders'; // Importa el nuevo componente
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -151,8 +152,9 @@ function MainApp() {
         <Routes>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-dashboard/add-product" element={<AddProductPage />} />
-           <Route path="/admin-dashboard/view-products" element={<AdminProducts />} /> {/* Nueva ruta */}
-           <Route path="/admin-dashboard/config" element={<ConfigurationPage />} /> {/* Nueva ruta */}
+           <Route path="/admin-dashboard/view-products" element={<AdminProducts />} /> 
+           <Route path="/admin-dashboard/view-orders" element={<AdminOrders />} /> {/* Nueva ruta */}
+           <Route path="/admin-dashboard/config" element={<ConfigurationPage />} /> 
           {/* Añade aquí más rutas del panel de administrador */}
         </Routes>
       </AdminLayout>
