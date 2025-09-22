@@ -1,3 +1,5 @@
+/* src/pages/AdminOrders.css */
+
 .admin-orders-container {
   padding: 20px;
 }
@@ -24,8 +26,53 @@
   color: #333;
 }
 
-.pedidos-table tbody tr:hover {
+.pedido-row {
+  cursor: pointer;
+}
+
+.pedido-row:hover {
   background-color: #f9f9f9;
+}
+
+.details-row td {
+  padding: 0;
+  background-color: #fafafa;
+}
+
+.details-container {
+  padding: 20px;
+}
+
+.details-container h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.details-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+.details-item:last-child {
+  border-bottom: none;
+}
+
+.product-thumb {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
 }
 
 .status-select {

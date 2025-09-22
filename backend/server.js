@@ -57,6 +57,24 @@ app.get('/api/pedidos/all', (req, res) => {
   });
 });
 
+// **Nuevo Endpoint: Obtener los detalles de un pedido específico**
+app.get('/api/pedidos/:id/details', (req, res) => {
+  const { id } = req.params;
+  const query = `
+    SELECT dp.cantidad, p.nombre, p.imagen, dp.precio_unitario
+    FROM detalles_pedido dp
+    JOIN productos p ON dp.producto_id = p.id
+    WHERE dp.pedido_id = ?;
+  `;
+  db.query(query, [id], (err, results) => {
+    if (err) {
+      console.error('Error al obtener los detalles del pedido:', err);
+      return res.status(500).json({ error: 'Error al obtener los detalles del pedido.' });
+    }
+    res.json(results);
+  });
+});
+
 // Ruta para actualizar el estado de un pedido
 app.put('/api/pedidos/:id/status', (req, res) => {
   const { id } = req.params;
