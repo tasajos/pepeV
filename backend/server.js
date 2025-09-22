@@ -44,6 +44,62 @@ app.get('/api/config', (req, res) => {
   });
 });
 
+
+
+
+
+// Actualiza el endpoint para crear pedidos
+app.post('/api/pedidos/create', (req, res) => {
+  const { nombre_cliente, telefono, ubicacion_lat, ubicacion_lng, total_pedido, productos } = req.body;
+
+  // 1. Insertar en la tabla pedidos_ventas
+  const pedidoQuery = 'INSERT INTO pedidos_ventas (nombre_cliente, telefono, ubicacion_lat, ubicacion_lng, total_pedido) VALUES (?, ?, ?, ?, ?)';
+  db.query(pedidoQuery, [nombre_cliente, telefono, ubicacion_lat, ubicacion_lng, total_pedido], (err, result) => {
+    if (err) {
+      console.error('Error al crear el pedido:', err);
+      return res.status(500).json({ error: 'Error al crear el pedido.' });
+    }
+
+    const pedidoId = result.insertId;
+
+    // 2. Insertar cada producto en la tabla detalles_pedido y actualizar el stock
+    const detallesQuery = 'INSERT INTO detalles_pedido (pedido_id, producto_id, cantidad, precio_unitario) VALUES ?';
+    const detallesValues = productos.map(item => [pedidoId, item.id, item.quantity, item.precio_venta]);
+
+    db.query(detallesQuery, [detallesValues], (err) => {
+      if (err) {
+        console.error('Error al insertar detalles del pedido:', err);
+        return res.status(500).json({ error: 'Error al insertar los detalles del pedido.' });
+      }
+
+      // 3. Reducir la cantidad de cada producto en el inventario
+      const updateStockQueries = productos.map(item => {
+        return new Promise((resolve, reject) => {
+          const updateQuery = 'UPDATE productos SET cantidad = cantidad - ? WHERE id = ?';
+          db.query(updateQuery, [item.quantity, item.id], (updateErr) => {
+            if (updateErr) return reject(updateErr);
+            resolve();
+          });
+        });
+      });
+
+      Promise.all(updateStockQueries)
+        .then(() => {
+          res.status(201).json({ message: 'Pedido creado y stock actualizado con éxito.', pedidoId });
+        })
+        .catch(updateErr => {
+          console.error('Error al actualizar el stock:', updateErr);
+          res.status(500).json({ error: 'Pedido creado, pero error al actualizar el stock.' });
+        });
+    });
+  });
+});
+
+
+
+
+
+
 // Ruta para actualizar un valor de configuración
 app.put('/api/config', (req, res) => {
   const { setting_name, setting_value } = req.body;

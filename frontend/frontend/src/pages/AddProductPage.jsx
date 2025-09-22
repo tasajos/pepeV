@@ -10,6 +10,7 @@ const AddProductPage = () => {
   const [nombre, setNombre] = useState('');
   const [descripcion, setDescripcion] = useState('');
   const [precio, setPrecio] = useState('');
+   const [cantidad, setCantidad] = useState(''); // Nuevo estado para la cantidad
   const [category, setCategory] = useState(categories[0]);
   const [imagen, setImagen] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,6 +73,12 @@ const AddProductPage = () => {
             <label>Precio (Bs):</label>
             <input type="number" step="0.01" value={precio} onChange={(e) => setPrecio(e.target.value)} required />
           </div>
+          <div className="form-group">
+            <label>Cantidad:</label>
+            <input type="number" value={cantidad} onChange={(e) => setCantidad(e.target.value)} required />
+          </div>
+
+
           <div className="form-group">
             <label>Categoría:</label>
             <select value={category} onChange={(e) => setCategory(e.target.value)}>

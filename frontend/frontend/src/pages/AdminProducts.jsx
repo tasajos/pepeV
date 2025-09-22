@@ -15,7 +15,6 @@ const AdminProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // La URL ahora es para obtener TODOS los productos
         const response = await fetch('http://localhost:5000/api/productos/all'); 
         if (!response.ok) {
           throw new Error('No se pudieron cargar los productos');
@@ -60,7 +59,7 @@ const AdminProducts = () => {
   if (loading) return <div>Cargando productos...</div>;
   if (error) return <div>Error: {error}</div>;
 
- return (
+  return (
     <div className="admin-products-container">
       <h2>Gestión de Productos</h2>
       <div className="products-grid">
@@ -70,9 +69,9 @@ const AdminProducts = () => {
             <div className="admin-product-details">
               <h3>{producto.nombre}</h3>
               <p>{producto.descripcion}</p>
-              {/* Muestra ambos precios para el administrador */}
               <p className="admin-price">Precio de Costo: Bs {Number(producto.precio).toFixed(2)}</p>
               <p className="admin-price-sale">Precio de Venta: Bs {Number(producto.precio_venta).toFixed(2)}</p>
+              <p className="admin-price">Cantidad en stock: {producto.cantidad}</p> {/* Muestra la cantidad */}
               <div className="status-toggle">
                 <span className={`status-badge ${producto.status === 1 ? 'active' : 'inactive'}`}>
                   {producto.status === 1 ? 'Habilitado' : 'Deshabilitado'}
