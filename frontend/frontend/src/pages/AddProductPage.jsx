@@ -38,7 +38,7 @@ const AddProductPage = () => {
       const response = await fetch('http://localhost:5000/api/productos/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, descripcion, precio, imagen: imageUrl, category }),
+        body: JSON.stringify({ nombre, descripcion, precio, cantidad, imagen: imageUrl, category }),
       });
 
       if (!response.ok) {

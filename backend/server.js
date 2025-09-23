@@ -253,9 +253,10 @@ app.get('/api/productos/all', (req, res) => {
 
 // Ruta para añadir un producto, con cálculo de precio de venta
 app.post('/api/productos/add', (req, res) => {
-  const { nombre, descripcion, precio, imagen, category } = req.body;
+  // Ahora el backend espera la 'cantidad'
+  const { nombre, descripcion, precio, cantidad, imagen, category } = req.body;
   
-  if (!nombre || !descripcion || !precio || !imagen || !category) {
+  if (!nombre || !descripcion || !precio || !cantidad || !imagen || !category) {
     return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
   }
   
@@ -270,9 +271,10 @@ app.post('/api/productos/add', (req, res) => {
     const porcentaje_venta = parseFloat(configResult[0].setting_value);
     const precio_venta = parseFloat(precio) + (parseFloat(precio) * porcentaje_venta / 100);
     
-    // Paso 2: Insertar el producto con el precio de venta calculado
-    const insertQuery = 'INSERT INTO productos (nombre, descripcion, precio, precio_venta, imagen, category) VALUES (?, ?, ?, ?, ?, ?)';
-    const values = [nombre, descripcion, precio, precio_venta.toFixed(2), imagen, category];
+    // Paso 2: Insertar el producto con el precio de venta y la cantidad calculados
+    // La consulta INSERT debe incluir la nueva columna 'cantidad'
+    const insertQuery = 'INSERT INTO productos (nombre, descripcion, precio, precio_venta, imagen, category, cantidad) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    const values = [nombre, descripcion, precio, precio_venta.toFixed(2), imagen, category, cantidad];
 
     db.query(insertQuery, values, (err, result) => {
       if (err) {
