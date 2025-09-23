@@ -31,14 +31,19 @@ const LoginPage = () => {
       }
 
       const userData = await response.json();
-      login(userData); // Guarda los datos del usuario en el contexto
+      login(userData);
       
       if (userData.role === 'Administrador') {
         navigate('/admin-dashboard', { replace: true });
+      } else if (userData.role === 'Proveedor') {
+        navigate('/supplier-dashboard', { replace: true }); // Redirige al panel de proveedor
       } else {
         navigate('/', { replace: true });
       }
       
+
+
+
     } catch (err) {
       setError(err.message);
       console.error(err);
@@ -46,6 +51,9 @@ const LoginPage = () => {
       setIsLoading(false);
     }
   };
+
+
+
 
   return (
     <div className="login-container">

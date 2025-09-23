@@ -16,8 +16,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AddProductPage from './pages/AddProductPage'; 
 import AdminLayout from './components/AdminLayout';
 import AdminProducts from './pages/AdminProducts';
-import ConfigurationPage from './pages/ConfigurationPage'; // Nuevo import
-import AdminOrders from './pages/AdminOrders'; // Importa el nuevo componente
+import ConfigurationPage from './pages/ConfigurationPage'; 
+import AdminOrders from './pages/AdminOrders'; 
+import SupplierDashboard from './pages/SupplierDashboard'; // Nuevo import
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -107,7 +108,6 @@ function MainApp() {
   const [searchTerm, setSearchTerm] = useState('');
   const [cartItems, setCartItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
   const { user, role, loading } = useAuth();
   
   const handleSearchChange = (event) => {
@@ -160,6 +160,18 @@ function MainApp() {
       </AdminLayout>
     );
   }
+
+ if (user && role === 'Proveedor') {
+    return (
+      <div className="App">
+        <Routes>
+          <Route path="/supplier-dashboard" element={<SupplierDashboard />} />
+          <Route path="/supplier-dashboard/add-product" element={<AddProductPage />} />
+        </Routes>
+      </div>
+    );
+  }
+
 
   // Layout para clientes y usuarios no autenticados
   return (
